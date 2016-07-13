@@ -19,12 +19,15 @@ Makefile包含着编译的配置和介绍说明。在96%的情况下，默认的
 ```$ make```
 
 上述命令会启动编译器并且构建这些库。
-
+  
 ## 在OSX上编译
 
 如果你在OSX系统上编译这个软件，你可能会遇到链接（linking）和“未解决标识符（unresolved symbol）”的错误。这种情况下你需要修改Makefile文件。在Makefile的文件中的有一个叫做“LINKER_FLAGS“的选项，这个选项应该扩展，同时，应该将这个额外的标志”-undefined dynamic_lookup“加进去。
 
 在你运行”make“之后，PHP-CPP的库已经构建完毕，剩下的事情就是将它安装到你的系统中。你可以使用”make install“命令。应该使用root权限来执行这个命令，要么使用”sudo“，要么先以root角色登陆。
 
+```$ sudo make install```
+
+就是这样。在完成了上述内容后，很高兴，你成为了安装了PHP-CPP系统的主人，然而任何事情都无法阻止构建你的第一个原生PHP扩展（翻译得太傻了）。
 
 
