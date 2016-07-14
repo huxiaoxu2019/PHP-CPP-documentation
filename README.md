@@ -1,5 +1,5 @@
 # 文档
-PHP-CPP库有着丰富的文档。下面左侧的菜单中说明了如何在你的服务器中[安装](https://github.com/GenialX/PHP-CPP-documentation/blob/master/install.md)PHP-CPP和如何创建你的第一个扩展。
+PHP-CPP库有着丰富的文档。下面左侧的菜单中说明了如何在你的服务器中[安装](https://github.com/GenialX/PHP-CPP-documentation/blob/master/install.md)PHP-CPP和[如何创建你的第一个扩展](https://github.com/GenialX/PHP-CPP-documentation/blob/master/your-first-extension.md)。
 
 ## 其他文章
 - PHP如何加载扩展？
