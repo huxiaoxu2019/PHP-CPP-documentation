@@ -45,7 +45,9 @@ PHP-CPP库中定义的"PHPCPP_EXPORT"宏，需要放在get_module()函数前面�
 
 我们继续深入。在get_module()函数里面，Php::Extension被实例化后返回。将Php::Extension实例化为一个静态的对象是非常必要的，因为这个对象必须在整个PHP生命周期中存在，而不仅仅在get_module()的生命周期中。其中的构造器（constructor）需要两个参数：一个是扩展的名称，一个是扩展的版本号。
 
-get_module()则最后一步就是返回扩展对象。这也许起初看起来很奇怪，因为get_modle()函数需要返回一个空指针（pointer-to-void），并不是一个Php::Extension对象。那么为什么编译器却没有抛错呢？
+get_module()则最后一步就是返回扩展对象。这也许起初看起来很奇怪，因为get_modle()函数需要返回一个空指针（pointer-to-void），并不是一个Php::Extension对象。那么为什么编译器却没有抛错呢？那是因为Php::Extension类中有着转换空指针的操作符（cast-to-void-pointer-operator）。所以，尽管看起来返回了一个整个扩展对象，但事实上，却返回了一个指向某一数据结构的内存指针。在核心PHP引擎中，能够读懂这个指针，并且获取扩展的详细信息。
+
+注意：上述的例子不会导出任何的PHP的原生函数和原生类类 - 仅仅创建了一个扩展。在[下一章节](https://github.com/GenialX/PHP-CPP-documentation/your-first-extension.md)中我们会讲到。
 
 
 
