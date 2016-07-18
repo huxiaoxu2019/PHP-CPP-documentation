@@ -39,6 +39,13 @@ extern "C" {
 
 下面一件你会注意的事情是，在'extern "C"'代码块中，有着一个get_module()的函数。尽管PHP-CPP库的描述是“PHP-CPP是一个C++库”。但是，在你的库中，尤其是get_module()函数中，PHP却期望它是用C语言实现的，而不是C++实现的。那也就是为什么我们把get_module()函数写在了'extern "C"'代码块中。这个标志会告诉C++编译器get_module()函数是由常规的C语言写的，这样就不会应用C++的规则（C++ name mangling）了。
 
+PHP-CPP库中定义的"PHPCPP_EXPORT"宏，需要放在get_module()函数前面。这个宏的作用是确保get_module()函数以共有（public）的方式导出，并且能在PHP中调用。根据不同的编译器和操作系统，这个宏会有不同的实现。
+
+顺便说下，这个宏也是唯一一个PHP-CPP提供的。PHP-CPP库本意是想设计成一个纯C++库，不使用那些预处理器中的魔术（magic）和技巧（tricks）。正如你所看到了，如果你看到一些貌似函数的东西，那么你可以确定它就是一个函数，同样当你看到一些貌似变量的东西，你也可以确定它就是变量。
+
+我们继续深入。在get_module()函数里面，Php::Extension被实例化后返回。将Php::Extension实例化为一个静态的对象是非常必要的，因为这个对象必须在整个PHP生命周期中存在，而不仅仅在get_module()的生命周期中。其中的构造器（constructor）需要两个参数：一个是扩展的名称，一个是扩展的版本号。
+
+get_module()则最后一步就是返回扩展对象。这也许起初看起来很奇怪，因为get_modle()函数需要返回一个空指针（pointer-to-void），并不是一个Php::Extension对象。那么为什么编译器却没有抛错呢？
 
 
 
