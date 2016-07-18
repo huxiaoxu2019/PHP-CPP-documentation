@@ -3,7 +3,7 @@ PHP-CPP库有着丰富的文档。下面左侧的菜单中说明了如何在你�
 
 ## 其他文章
 - [PHP如何加载扩展？](https://github.com/GenialX/PHP-CPP-documentation/blob/master/loading-extensions.md)
-- 生成输出（output）与错误（error）
+- [输出（output）与错误（error）](https://github.com/GenialX/PHP-CPP-documentation/blob/master/output-and-errors.md)
 - 注册原声函数
 - 函数参数
 - 调用函数
