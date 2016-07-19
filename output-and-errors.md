@@ -31,3 +31,33 @@ void example()
 
 ## 错误、报警和警告
 当你想注册一个PHP的错误函数时（在C++中等同于trigger_error()函数），你可以使用'Php::error'、'Php::notice'、'Php::warning'和'Php::deprecated'流。这些也是'std::ostream'类的实例。
+
+```
+/**
+ *  Example function that shows how to generate output
+ */
+void example()
+{
+    // generate a PHP notice
+    Php::notice << "this is a notice" << std::flush;
+
+    // generate a PHP warning
+    Php::warning << "this is a warning" << std::flush;
+
+    // inform the user that a call to a deprecated function was made
+    Php::deprecated << "this method is deprecated" << std::flush;
+
+    // generate a fatal error
+    Php::error << "fatal error" << std::flush;
+
+    // this code will no longer be called
+    Php::out << "regular output" << std::endl;
+}  
+```
+
+在上面的例子中，你会看到我们使用了'std::flush'而不是'std::endl'。这么做的原因有两个：它追加了一个新行，同时冲刷了缓冲区。对于错误（errors）、提醒（notice）和警告（warnings）这些情况，我们并不需要最佳一个新行，但是为了真正的生成输出内容，需要冲刷缓冲区。
+
+当使用'Php::error'流时有个奇怪的事情：当你刷新缓冲区时，PHP脚本会以一个致命错误（fatal error）结束，同时C++也立即结束。在底层，PHP引擎会跳转到Zend引擎内部底层。在上面的例子里面，“Php::out << "regular output" << std::endl;”这条语句永远不会被调用。
+
+这些情况是不同寻常的，同时（对于我们来说）和正规的软件工程规则是冲突的。一个生产输出的函数本不应该抛出异常。如果一段代码看起来是正常的，那么执行起来本应该也是正常的，而不是做出一些反常行为，比如跳出当前的调用栈。因此我们不建议使用'Php::error' - 除非在比较极端的情况下使用它。
+
