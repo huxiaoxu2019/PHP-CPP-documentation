@@ -88,4 +88,25 @@ string
 string
 ```
 
-我们注意到了一共有四种生成函数的方式。我们已经看到两种了，但是这两种都没有接收参数。让我们来以第四种方式为例，写一个既能接收参数又能返回值的函数。
+我们注意到了一共有四种生成函数的方式。我们已经看到两种了，但是这两种都没有接收参数。让我们来以第四种方式为例，写一个既能接收参数又能返回值的函数。这面例子中的函数接收若干数字参数，并求其总和：
+
+```
+#include <phpcpp.h>
+
+Php::Value sum_everything(Php::Parameters &parameters)
+{
+    int result = 0;
+    for (auto &param : parameters) result += param;
+    return result;
+}
+
+extern "C" {
+    PHPCPP_EXPORT void *get_module() {
+        static Php::Extension extension("my_extension", "1.0");
+        extension.add<sum_everything>("sum_everything");
+        return extension;
+    }
+}
+```
+
+是不是看起来很简单？事实上，Php::Parameters类基本上等同于一个由Php::Value对象填充的std::vector类 - 同时你可以进行轮询（iterate）。
