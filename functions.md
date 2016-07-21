@@ -36,3 +36,56 @@ extern "C" {
 extension.add("myFunction", myFunction);
 ```
 
+上面的代码作用不难想象。如果你部署了这个扩展，可以创建一个PHP脚本并调用myFunction方法，之后会输出"example output"。
+
+正如我们前面所说的那样，有四种可以使用的函数形式。在第一个案例中我们展示了最简单的形式：一个不接收任何参数的函数，同时返回空。如果一个带返回值的函数应该怎么办呢？
+
+```
+#include <phpcpp.h>
+#include <stdlib.h>
+
+Php::Value myFunction()
+{
+    if (rand() % 2 == 0)
+    {
+        return "string";
+    }
+    else
+    {
+        return 123;
+    }
+}
+
+extern "C" {
+    PHPCPP_EXPORT void *get_module() {
+        static Php::Extension extension("my_extension", "1.0");
+        extension.add<myFunction>("myFunction");
+        return extension;
+    }
+}
+```
+
+酷不酷？在PHP中，一个函数的返回值可以是一个数字，也可以是一个字符串，这完全没有问题。但这在C++中全不可行，因为一个函数必须总是返回同样类型的变量。但是，Php::Value类可以被作为一个数字，也可以作为一个字符串（数组、对象，后面会提到更多） - 现在，我们可以利用纯C++代码来写一个可以返回数字或者字符串变量的函数。你可以用简单的脚本来测试这个函数。
+
+
+```
+<?php
+    for ($i=0; $i<10; $i++) echo(myFunction()."\n");
+?>
+```
+
+上述例子中的输出如下：
+
+```
+123
+123
+string
+123
+123
+string
+string
+string
+string
+```
+
+我们注意到了一共有四种生成函数的方式。我们已经看到两种了，但是这两种都没有接收参数。让我们来以第四种方式为例，写一个既能接收参数又能返回值的函数。
