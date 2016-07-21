@@ -109,4 +109,6 @@ extern "C" {
 }
 ```
 
-是不是看起来很简单？事实上，Php::Parameters类基本上等同于一个由Php::Value对象填充的std::vector类 - 同时你可以进行轮询（iterate）。
+是不是看起来很简单？事实上，Php::Parameters类基本上等同于一个由Php::Value对象填充的std::vector类 - 同时你可以进行轮询（iterate）。我们使用C++11的这种新方式来轮询，使用C++11新关键字“auto”来告诉编译器找出参数向量中存储的变量类型（当然是Php::Value类型）。
+
+
