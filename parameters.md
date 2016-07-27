@@ -121,4 +121,30 @@ Php::Type::Callable
 ByVal(const char *name, const char *classname, bool nullable = false, bool required = true);
 ```
 
+这个可选的构造器同样有'name'和'required'参数，但是前面可用的Php::Type参数被'classname'和'nullable'参数替代了。当一个函数接收一个指定类型的对象作为参数时，可以用这个构造器。举个例子，看看下面的PHP代码：
+
+```
+<?php
+function example1(DateTime $time) { ... }
+function example1(DateTime $time = null) { Php::Value time = params[0]; ... }
+```
+
+相应在C++中的代码如下：
+
+```
+#include <phpcpp.h>;
+
+void example1(Php::Parameters &amp;params) { Php::Value time = params[0]; ... }
+void example2(Php::Parameters &amp;params) { Php::Value time = params[0]; ... }
+
+extern "C" {
+    PHPCPP_EXPORT void *get_module() {
+        static Php::Extension myExtension("my_extension", "1.0");
+        myExtension.add<example1>("example1", { Php::ByVal("time", "DateTime", false); });
+        myExtension.add<example2>("example2", { Php::ByVal("time", "DateTime", true); });
+        return myExtension;
+    }
+}
+```
+
 
