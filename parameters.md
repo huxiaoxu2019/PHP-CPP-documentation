@@ -88,4 +88,37 @@ ByVal(const char *name, Php::Type type, bool required = true);
 
 第一参数必须是一个参数名称。这看起来有些奇怪，因为PHP语言并不像其他语言一样支持名称变量（）named variables）的概念。事实上，只有当函数调用方式有误抛出错误时，这个名称用于参数错误信息。
 
+Php::Type参数更加有趣。支持下面的类型：
+
+```
+Php::Type::Null
+Php::Type::Numeric
+Php::Type::Float
+Php::Type::Bool
+Php::Type::Array
+Php::Type::Object
+Php::Type::String
+Php::Type::Resource
+Php::Type::Constant
+Php::Type::ConstantArray
+Php::Type::Callable
+```
+
+事实上，只有当你指定参数类型为Php::Type::Array或者Php::Type::Object时才起作用，因为其它类型在PHP底层引擎中不会有所区分。
+
+最后一个参数（你还记得那个叫做'required'的参数吗？）可以用来设置参数是否可选。如果设置为true，当调用这个函数时但没有传递指定的参数，PHP引擎会注册一个错误。这个参数只对第二个开始的参数起作用，因为（当然）第一个参数不可以是可选的，后面的参数是可以的。
+
+如果你写一个以某个对象为参数的函数的话，可以使用下面的第二种构造方法：
+
+```
+/**
+ *  Constructor
+ *  @param  name        Name of the parameter
+ *  @param  classname   Name of the class
+ *  @param  nullable    Can it be null?
+ *  @param  required    Is this parameter required?
+ */
+ByVal(const char *name, const char *classname, bool nullable = false, bool required = true);
+```
+
 
