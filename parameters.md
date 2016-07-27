@@ -51,3 +51,41 @@ function example3(int $param)
 
 对于原生函数也是一样的。尽管PHP引擎和PHP-CPP库提供了可以指定函数参数类型为整数或者字符串类型，但是这种设置将来会完全废弃掉。也许，这种机制将来会有所完善（我们希望这样），但是暂时仅有指定参数类型为对象和数组才是有意义的。我们之所以在PHP-CPP库中，仍然要支持这种必要的类型指定，是因为在PHP核心引擎中是支持的。那么，我们也为将来的PHP版本做了准备。目前这些指定参数类型为整数类型的例子中是没有意义的。
 
+回到我们的例子中来，下面的是在PHP中调用函数的一些例子。
+```
+<?php
+// correct call, parameters are numeric and two objects of the right type
+example(12, new ExampleClass(), new OtherClass());
+
+// also valid, first parameter is not numeric but an array, but the
+// Zend engine does not check this even though it was specified
+example(array(1,2,3), new ExampleClass(), new OtherClass());
+
+// invalid, wrong number of parameters
+example(12, new ExampleClass());
+
+// invalid, wrong objects
+example(12, new DateTime(), new DateTime());
+
+// invalid, "x" and "z" are no objects
+example("x", "y", "z");
+```
+
+由于PHP引擎注册了错误机制，当调用函数时传错了参数，PHP会抛出相应的错误，同时不会真正的调用到原生函数。
+
+## Php::ByVal类的延展
+Php::ByVal类可以通过两种方式来实例化。我们来看下C++头文件中的第一种构造器。
+
+```
+/**
+ *  Constructor
+ *  @param  name        Name of the parameter
+ *  @param  type        Parameter type
+ *  @param  required    Is this parameter required?
+ */
+ByVal(const char *name, Php::Type type, bool required = true);
+```
+
+第一参数必须是一个参数名称。这看起来有些奇怪，因为PHP语言并不像其他语言一样支持名称变量（）named variables）的概念。事实上，只有当函数调用方式有误抛出错误时，这个名称用于参数错误信息。
+
+
