@@ -28,3 +28,26 @@ extern "C" {
 ## 你真的可以指定一个未知参数的类型么？
 当我们指定参数类型为数字类型时，你可能会觉得奇怪。毕竟，在PHP中并没有官方的方式来指定一个未知参数的类型。当你用PHP写一个函数时，可以指定函数的参数是一个对象或者是数组，但是不能指定成一个字符串类型或者整数类型。
 
+```
+<?php
+// example how you can enforce that a function can only be called with an object
+function example1(MyClass $param)
+{
+    ...
+}
+
+// another example to enforce an array parameter
+function example2(array $param)
+{
+    ...
+}
+
+// this is not (yet?) possible in PHP
+function example3(int $param)
+{
+    ...
+}
+```
+
+对于原生函数也是一样的。尽管PHP引擎和PHP-CPP库提供了可以指定函数参数类型为整数或者字符串类型，但是这种设置将来会完全废弃掉。也许，这种机制将来会有所完善（我们希望这样），但是暂时仅有指定参数类型为对象和数组才是有意义的。我们之所以在PHP-CPP库中，仍然要支持这种必要的类型指定，是因为在PHP核心引擎中是支持的。那么，我们也为将来的PHP版本做了准备。目前这些指定参数类型为整数类型的例子中是没有意义的。
+
