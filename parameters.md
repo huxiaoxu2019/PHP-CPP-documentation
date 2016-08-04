@@ -151,3 +151,43 @@ extern "C" {
 通过Php::ByVal类的命名，你也许会推测出一定还会有类Php::ByRef 你猜对了。事实上，确实有这个类。。当你创建一个接收一个引用类型的参数时（同时你可以通过这个参数“返回”一个值），你可以利用这个类来指定参数类型。
 
 Php::ByRef和Php::ByVal有着同样的特性，同时可以以一样的方式来使用。不同之处在于，当有人在调用你的函数时，ByRef会检查调用的参数是否为一个字面值（literal）引用，而不是一个变量。这种情况下传递变量是不可以的。如果传递变量，那么会注册一个错误，同时函数不会被调用。让我们看下面的例子，下面的扩展例子中创建了能够交换两个变量值的函数。
+
+```
+#include <phpcpp.h>
+
+void swap(Php::Parameters &params)
+{
+    Php::Value temp = params[0];
+    params[0] = params[1];
+    params[1] = temp;
+}
+
+extern "C" {
+    PHPCPP_EXPORT void *get_module() {
+        static Php::Extension myExtension("my_extension", "1.0");
+        myExtension.add<swap>("swap", {
+            Php::ByRef("a", Php::Type::Numeric),
+            Php::ByRef("b", Php::Type::Numeric)
+        });
+        return myExtension;
+    }
+}
+```
+
+那么如何调用这个函数呢：
+
+```
+<?php
+// define two variables
+$a = 1;
+$b = 2;
+
+// swap the variables
+swap($a, $b);
+
+// invalid, literals cannot be passed by reference
+swap(10,20);
+?>
+```
+
+## 总结
