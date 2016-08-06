@@ -88,8 +88,42 @@ extern "C" {
 
 在PHP脚本中，你可以创建一个填充两个成员的数组：一个对象和一个方法名称的字符串。这个数组可以当做一个常规函数来用。在C++中同样可以，正如我们例子中所展示的“time_format”变量。
 
+例如下面的例子。
 
+```
+<?php
+    // define a user space function
+    function some_function($param)
+    {
+        echo("userspace function called with $param\n");
+    }
 
+    // example input
+    $input = array(
+        'x' =>  10,
+        'y' =>  20,
+        'z' =>  30
+    );
+
+    example_function($input, function($param1, $param2) {
+        echo("lambda function called with param $param1 $param2\n");
+    });
+?>
+```
+
+上面脚本的输出如下：
+
+```
+key: x
+key: y
+key: z
+userspace function called with some_parameter
+2014-03-08 13:55:54
+lambda function called with param some parameter
+2014-03-08 13:55:54
+```
+
+如果你调用一个不存在的函数或者方法，那么Php::Exception异常将会抛出。如果在你的C++代码中没有进行捕获，他将会冒泡（bubble up）并在PHP脚本中抛出异常。
 
 
 
