@@ -80,6 +80,8 @@ extern "C" {
 
 从上面的例子中，你可以看出相对于PHP而言，利用C++在调用函数上会有所不同。第一个不同点就是调用Php::array_keys()函数。在PHP-CPP内部有着所有PHP重要函数的长列表，而且你可以直接从扩展中直接调用这些函数。Php::array_keys就是其中一个。
 
+许多内置函数，比如Php::array_keys()，会返回Php::Value类的实例。然而，在这个例子中，你可以看出我们直接利用std::vector接收返回值。这是可以的，因为在PHP::Value类内部有着隐身转换运算符（implicit casting operator），她会自动地将这个对象转换成std::vector类型。
+
 
 
 
