@@ -174,6 +174,9 @@ extern "C" {
 }
 ```
 
+在上面的例子中，我们将C++的lambda函数复制给一个Php::Function的对象。Php::Function类是继承于Php::Value类的。其中两者的唯一区别就是Php::Function的构造函数接收一个函数作为参数。除此之外，别无两样。事实上，可以跨过Php::Function，直接将C++函数赋值给Php::Value对象。但由于调用模糊（calling ambiguities）所以并不可行。
+
+Php::Funtion的使用方法和Php::Value一样：你可以将其赋值给另一个Php::Value对象，也可以在调用PHP函数时，作为参数传递。正如上面的例子：我们利用C++函数'multiply_by_two'调用了用户自定义函数my_array_map()。
 
 
 
