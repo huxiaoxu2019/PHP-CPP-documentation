@@ -24,6 +24,8 @@ other_function(function() {
 });
 
 ?>
+
+
 ```
 
 对于PHP程序员来说，上面的代码不足为奇。如果想利用PHP-CPP实现如'other_function'的PHP函数，我们需要使用C++。正如在之前你看到的那些例子，C++函数会接收一个Php::Parameters的对象作为参数。这个参数其实是一个填充着Php::Value对象的std::vector。
@@ -178,17 +180,12 @@ extern "C" {
 
 Php::Funtion的使用方法和Php::Value一样：你可以将其赋值给另一个Php::Value对象，也可以在调用PHP函数时，作为参数传递。正如上面的例子：我们利用C++函数'multiply_by_two'调用了用户自定义函数my_array_map()。
 
+## C++函数签名
+Php::Function类的构造器接收以如下任意一种形式声明的C++函数：
 
+```
+Php::Value function();
+Php::Value function(Php::Parameters &params);
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
+实际上，在Php::Function类中是通过C++的std::function对象来存储函数，所以任何能够存储在一个std::function对象的函数，都可以传递给Php::Function类库。
