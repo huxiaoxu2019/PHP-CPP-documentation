@@ -8,7 +8,7 @@ PHP-CPP库有着丰富的文档。下面左侧的菜单中说明了如何在你�
 - [函数参数](https://github.com/GenialX/PHP-CPP-documentation/blob/master/parameters.md)
 - [调用函数](https://github.com/GenialX/PHP-CPP-documentation/blob/master/calling-functions-and-methods.md)
 - [Lambda函数](https://github.com/GenialX/PHP-CPP-documentation/blob/master/lambda-functions.md)
-- 类与对象
+- [类与对象](https://github.com/GenialX/PHP-CPP-documentation/blob/master/classes-and-objects.md)
 - 构造器与析构器
 - 类的继承
 - 魔术方法
