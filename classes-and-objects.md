@@ -90,9 +90,3 @@ Php::Value  YourClass::example8(Php::Parameters &params) const;
 方法和[常规函数](http://www.php-cpp.com/documentation/functions)的工作方式是一样的，唯一不同的是在方法中可以（当然）访问当前实例的成员变量。
 
 为了能够在PHP中使用C++中的类库，必须在get_module()函数中将其加入到扩展对象中。这时Php::Class模板类库就派上用场了。其中模板参数是你的实现类。这样，当在PHP中调用“new”操作符时，Php::Class类库才能识别出需要实例化哪一个类。
-
-
-
-
-
-
