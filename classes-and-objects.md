@@ -94,4 +94,97 @@ Php::Value  YourClass::example8(Php::Parameters &params) const;
 其中Php::Class的构造函数接收一个字符串作为参数，值为PHP中的类名称。正如上面的例子，我们可以利用Php::method这个方法来将方法注册到该类中，并得以在PHP中调用。你也许会发现，在上面的例子中我们使用C++11 std::move()方法来将该类加入到扩展中。相对于直接拷贝，这么做更有效率。
 
 ## 方法参数
+类的成员方法和函数很相似，指定类成员方法参数的方式可以参照指定函数参数的方式，比如使用Php::ByVal和Php::ByRef类库。
 
+```
+#include <phpcpp.h>
+
+/**
+ *  Counter class that can be used for counting
+ */
+class Counter : public Php::Base
+{
+private:
+    /**
+     *  The internal value
+     *  @var    int
+     */
+    int _value = 0;
+
+public:
+    /**
+     *  C++ constructor and destructor
+     */
+    Counter() {}
+    virtual ~Counter() {}
+
+    /**
+     *  Increment operation
+     *  This method gets one optional parameter holding the change
+     *  @param  int     Optional increment value
+     *  @return int     New value
+     */
+    Php::Value increment(Php::Parameters &params) 
+    { 
+        return _value += params.empty() ? 1 : (int)params[0];
+    }
+
+    /**
+     *  Decrement operation
+     *  This method gets one optional parameter holding the change
+     *  @param  int     Optional decrement value
+     *  @return int     New value
+     */
+    Php::Value decrement(Php::Parameters &params) 
+    { 
+        return _value -= params.empty() ? 1 : (int)params[0]; 
+    }
+
+    /**
+     *  Method to retrieve the current value
+     *  @return int
+     */
+    Php::Value value() const 
+    { 
+        return _value; 
+    }
+};
+
+/**
+ *  Switch to C context to ensure that the get_module() function
+ *  is callable by C programs (which the Zend engine is)
+ */
+extern "C" {
+    /**
+     *  Startup function that is called by the Zend engine 
+     *  to retrieve all information about the extension
+     *  @return void*
+     */
+    PHPCPP_EXPORT void *get_module() {
+        // create static instance of the extension object
+        static Php::Extension myExtension("my_extension", "1.0");
+
+        // description of the class so that PHP knows which methods are accessible
+        Php::Class<Counter> counter("Counter");
+
+        // register the increment method, and specify its parameters
+        counter.method<&Counter::increment>("increment", { 
+            Php::ByVal("change", Php::Type::Numeric, false) 
+        });
+
+        // register the decrement, and specify its parameters
+        counter.method<&Counter::decrement>("decrement", { 
+            Php::ByVal("change", Php::Type::Numeric, false) 
+        });
+
+        // register the value method
+        counter.method<&Counter::value>("value", {});
+
+        // add the class to the extension
+        myExtension.add(std::move(counter));
+
+        // return the extension
+        return myExtension;
+    }
+}
+```
