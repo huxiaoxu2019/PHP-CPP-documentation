@@ -188,3 +188,20 @@ extern "C" {
     }
 }
 ```
+
+正如上面的例子，我们修改了第一个例子。其中increment和decrement接收一个可选的参数'change'，类型为数字类型，代表当前counter属性的变化。注意这个参数是可选的 - 所以在该方法的内部实现中，我们需要检查该值是否大于0，以避免参数严重的段错误（segementation faults）。
+
+```
+<?php
+$counter = new Counter();
+$counter->increment(5);
+$counter->increment();
+$counter->decrement(3);
+echo($counter->value()."\n");
+?>
+```
+
+上面PHP脚本例子中，使用了原生的counter类库。输出即为（正如你期望的那样）3。
+
+在这个例子中，我们并没有展示如何使用Php::ByRef类库，但是它的用法和functions很类似，所以我们认为这个例子并不重要（当然，我们也不是使用引用传递参数的忠实粉丝）。
+
