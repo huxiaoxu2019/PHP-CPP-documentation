@@ -209,3 +209,118 @@ echo($counter->value()."\n");
 
 同样，也支持静态方法。静态方法即一个没有访问'this'权限的方法。在C++中，类的静态方法和常规函数是一致的，常规函数也没有访问'this'的权限。其中，C++方法和C++函数的唯一区别在于编译时：编译器允许静态方法访问私有变量（private data）。然而，静态方法和常规函数的签名是一致的。
 
+```
+#include <phpcpp.h>
+
+/**
+ *  Regular function
+ *
+ *  Because a regular function does not have a 'this' pointer,
+ *  it has the same signature as static methods
+ *
+ *  @param  params      Parameters passed to the function
+ */
+void regularFunction(Php::Parameters &params)
+{
+    // @todo add implementation
+}
+
+/**
+ *  A very simple class that will <b>not</b> be exported to PHP
+ */
+class PrivateClass
+{
+public:
+    /**
+     *  C++ constructor and destructor
+     */
+    PrivateClass() = default;
+    virtual ~PrivateClass() = default;
+
+    /** 
+     *  Static method
+     *
+     *  A static method also has no 'this' pointer and has
+     *  therefore a signature identical to regular functions
+     *
+     *  @param  params      Parameters passed to the method
+     */
+    static void staticMethod(Php::Parameters &params)
+    {
+        // @todo add implementation
+    }
+};
+
+/**
+ *  A very simple class that will be exported to PHP
+ */
+class PublicClass : public Php::Base
+{
+public:
+    /**
+     *  C++ constructor and destructor
+     */
+    PublicClass() = default;
+    virtual ~PublicClass() = default;
+
+    /** 
+     *  Another static method
+     *
+     *  This static has exactly the same signature as the
+     *  regular function and static method that were mentioned
+     *  before
+     *
+     *  @param  params      Parameters passed to the method
+     */
+    static void staticMethod(Php::Parameters &params)
+    {
+        // @todo add implementation
+    }
+};
+
+/**
+ *  Switch to C context to ensure that the get_module() function
+ *  is callable by C programs (which the Zend engine is)
+ */
+extern "C" {
+    /**
+     *  Startup function that is called by the Zend engine 
+     *  to retrieve all information about the extension
+     *  @return void*
+     */
+    PHPCPP_EXPORT void *get_module() {
+        // create static instance of the extension object
+        static Php::Extension myExtension("my_extension", "1.0");
+
+        // description of the class so that PHP knows which methods are accessible
+        Php::Class<PublicClass> myClass("MyClass");
+
+        // register the PublicClass::staticMethod to be a
+        // static method callable from PHP
+        myClass.method<&PublicClass::staticMethod>("static1");
+
+        // regular functions have the same signatures as 
+        // static methods. So nothing forbids you to register
+        // a normal function as static method too
+        myClass.method<regularFunction>("static2");
+
+        // and even static methods from completely different
+        // classes have the same function signature and can
+        // thus be registered
+        myClass.method<&PrivateClass::staticMethod>("static3");
+
+        // add the class to the extension
+        myExtension.add(std::move(myClass));
+
+        // In fact, because a static method has the same signature
+        // as a regular function, you can also register static
+        // C++ methods as regular global PHP functions
+        myExtension.add("myFunction", &PrivateClass::staticMethod);
+
+        // return the extension
+        return myExtension;
+    }
+}
+```
+
+也许你会问，到底有多实用？我们建议您保持您的代码干净、简单并且可维护，同时仅注册已经添加到C++类中的PHP静态方法。但是，C++却不限于此。让我们用一个例子来说明如何调用静态方法。
