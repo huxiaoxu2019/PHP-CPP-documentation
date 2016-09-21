@@ -324,3 +324,19 @@ extern "C" {
 ```
 
 也许你会问，到底有多实用？我们建议您保持您的代码干净、简单并且可维护，同时仅注册已经添加到C++类中的PHP静态方法。但是，C++却不限于此。让我们用一个例子来说明如何调用静态方法。
+
+```
+<?php
+// this will call PublicClass::staticMethod()
+MyClass::static1();
+
+// this will call PrivateClass::staticMethod()
+MyClass::static2();
+
+// this will call regularFunction()
+MyClass::static3();
+
+// this will also call PrivateClass::staticMethod()
+myFunction();
+?>
+```
