@@ -340,3 +340,6 @@ MyClass::static3();
 myFunction();
 ?>
 ```
+# 访问权限
+
+在PHP中（C++ 中同样），可以指定函数的访问权限，比如public、private或者protected。
