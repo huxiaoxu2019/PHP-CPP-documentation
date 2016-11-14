@@ -33,7 +33,7 @@ other_function(function() {
 ```
 #include <phpcpp.h>
 /**
- *  Native function that is callable from PHP
+ *  Native function that is callable from PHP.
  *
  *  This function gets one parameter that holds a callable anonynous
  *  PHP function.
