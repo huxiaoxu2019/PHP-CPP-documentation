@@ -343,3 +343,43 @@ myFunction();
 # 访问权限
 
 在PHP中（C++ 中同样），可以指定函数的访问权限，比如public、private或者protected。当你向某个类中添加方法时可以通过指定一个额外的标志参数来实现指定访问权限的功能。比如你打算将上面例子中的increment和decrement方法的访问权限设置为受保护的（protected），可以添加一个简单的标志参数。
+
+```
+/**
+ *  Switch to C context to ensure that the get_module() function
+ *  is callable by C programs (which the Zend engine is)
+ */
+extern "C" {
+    /**
+     *  Startup function that is called by the Zend engine 
+     *  to retrieve all information about the extension
+     *  @return void*
+     */
+    PHPCPP_EXPORT void *get_module() {
+        // create static instance of the extension object
+        static Php::Extension myExtension("my_extension", "1.0");
+
+        // description of the class so that PHP knows which methods are accessible
+        Php::Class<Counter> counter("Counter");
+
+        // register the increment method, and specify its parameters
+        counter.method<&Counter::increment>("increment", Php::Protected, { 
+            Php::ByVal("change", Php::Type::Numeric, false) 
+        });
+
+        // register the decrement, and specify its parameters
+        counter.method<&Counter::decrement>("decrement", Php::Protected, { 
+            Php::ByVal("change", Php::Type::Numeric, false) 
+        });
+
+        // register the value method
+        counter.method<&Counter::value>("value", Php::Public | Php::Final);
+
+        // add the class to the extension
+        myExtension.add(std::move(counter));
+
+        // return the extension
+        return myExtension;
+    }
+}
+```
