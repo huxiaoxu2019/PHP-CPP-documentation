@@ -342,4 +342,4 @@ myFunction();
 ```
 # 访问权限
 
-在PHP中（C++ 中同样），可以指定函数的访问权限，比如public、private或者protected。
+在PHP中（C++ 中同样），可以指定函数的访问权限，比如public、private或者protected。当你向某个类中添加方法时可以通过指定一个额外的标志参数来实现指定访问权限的功能。比如你打算将上面例子中的increment和decrement方法的访问权限设置为受保护的（protected），可以添加一个简单的标志参数。
